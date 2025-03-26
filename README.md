@@ -187,3 +187,87 @@ Returns a success message upon logout.
   "error": "Unauthorized. Token missing or invalid."
 }
 ```
+
+# Captain Registration Endpoint Documentation
+
+## Endpoint
+**POST /captain/register**
+
+## Description
+This endpoint is used to register a new captain in the system. It performs the following steps:
+- Validates the incoming request data using express-validator.
+- Ensures all required fields are provided.
+- Verifies that the email has not been used by another captain.
+- Hashes the input password.
+- Saves the new captain's details in the database.
+- Generates an authentication token for the newly created captain.
+
+## Request Headers
+- `Content-Type: application/json`
+
+## Request Body
+The endpoint expects a JSON payload with the following fields:
+
+| Field                    | Type     | Description                                     | Required | Constraints                                 |
+|--------------------------|----------|-------------------------------------------------|----------|---------------------------------------------|
+| `fullname.firstname`     | String   | The first name of the captain                  | Yes      | Minimum length of 3 characters             |
+| `fullname.lastname`      | String   | The last name of the captain                   | Yes      | Minimum length of 3 characters             |
+| `email`                 | String   | The email address of the captain               | Yes      | Must be a valid email address              |
+| `password`              | String   | The password for the account                   | Yes      | Minimum length of 6 characters             |
+| `vehicle.color`         | String   | The color of the captain's vehicle             | Yes      | Cannot be empty                            |
+| `vehicle.plate`         | String   | The license plate number of the vehicle        | Yes      | Must be unique                             |
+| `vehicle.capacity`      | Number   | The seating capacity of the vehicle            | Yes      | Must be a positive integer                 |
+| `vehicle.vehicleType`   | String   | The type of vehicle (e.g., car, bike, etc.)    | Yes      | Must be a valid vehicle type               |
+
+### Example Request Body
+```json
+{
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "test123@gmail.com",
+  "password": "test@123",
+  "vehicle": {
+    "color": "Red",
+    "plate": "AB123CD",
+    "capacity": 2,
+    "vehicleType": "car"
+  }
+}
+```
+
+## Response
+The endpoint returns the newly created captain's details along with an authentication token.
+
+### Example Response (Successful Registration)
+```json
+{
+    "captain": {
+        "fullname": {
+            "firstname": "John",
+            "lastname": "Doe"
+        },
+        "email": "test123@gmail.com",
+        "password": "$2b$10$XQmOCov1/atBB631Hf3mgur49fLytQivzUOssZ49zNfTA31Q6fblG",
+        "status": "inactive",
+        "vehicle": {
+            "color": "Red",
+            "plate": "AB123CD",
+            "capacity": 2,
+            "vehicleType": "car"
+        },
+        "_id": "67e40f924419bb1168300272",
+        "__v": 0
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2U0MGY5MjQ0MTliYjExNjgzMDAyNzIiLCJpYXQiOjE3NDI5OTk0NDIsImV4cCI6MTc0MzA4NTg0Mn0.7zuRQdVtyYJyetgWYz50PcYpj8NmjbmGuN-yuTtUez4"
+}
+```
+
+### Example Response (Email Already Exists)
+```json
+{
+  "error": "Email is already in use."
+}
+```
+
