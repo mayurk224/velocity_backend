@@ -271,3 +271,136 @@ The endpoint returns the newly created captain's details along with an authentic
 }
 ```
 
+# Captain Login Endpoint Documentation
+
+## Endpoint
+**POST /captain/login**
+
+## Description
+This endpoint is used to authenticate a captain and generate an authentication token. It performs the following steps:
+- Validates the incoming request data using express-validator.
+- Checks that both email and password are provided.
+- Verifies that the captain exists in the database.
+- Compares the provided password with the stored hashed password.
+- Generates and returns an authentication token upon successful login.
+- Stores the token in cookies for session management.
+
+## Request Headers
+- `Content-Type: application/json`
+
+## Request Body
+The endpoint expects a JSON payload with the following fields:
+
+| Field     | Type   | Description                      | Required | Constraints |
+|-----------|--------|----------------------------------|----------|-------------|
+| `email`   | String | The email address of the captain | Yes      | Must be a valid email address |
+| `password` | String | The password for the account   | Yes      | Minimum length of 6 characters |
+
+### Example Request Body
+```json
+{
+  "email": "test123@gmail.com",
+  "password": "test@123"
+}
+```
+
+### Example Response (Successful Login)
+```json
+{
+  "captain": {
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "test123@gmail.com",
+    "_id": "67e40f924419bb1168300272"
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2U0MGY5MjQ0MTliYjExNjgzMDAyNzIiLCJpYXQiOjE3NDI5OTk0NDIsImV4cCI6MTc0MzA4NTg0Mn0.7zuRQdVtyYJyetgWYz50PcYpj8NmjbmGuN-yuTtUez4"
+}
+```
+
+### Example Response (Invalid Credentials)
+```json
+{
+  "error": "Invalid email or password."
+}
+```
+
+---
+
+# Captain Profile Endpoint Documentation
+
+## Endpoint
+**GET /captain/profile**
+
+## Description
+This endpoint is used to retrieve the authenticated captain's profile details. It performs the following steps:
+- Validates the authentication token from cookies or request headers.
+- Extracts the captain's ID from the token.
+- Fetches the captain's details from the database.
+- Returns the captain's profile data.
+
+## Request Headers (Alternative Authentication Method)
+- `Authorization: Bearer <token>` (if not using cookies)
+
+## Response
+The endpoint returns the authenticated captain's profile information.
+
+### Example Response (Successful Profile Fetch)
+```json
+{
+  "captain": {
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "test123@gmail.com",
+    "status": "active",
+    "vehicle": {
+      "color": "Red",
+      "plate": "AB123CD",
+      "capacity": 2,
+      "vehicleType": "car"
+    },
+    "_id": "67e40f924419bb1168300272",
+    "createdAt": "2024-03-25T12:34:56.789Z"
+  }
+}
+```
+
+### Example Response (Unauthorized Access)
+```json
+{
+  "error": "Unauthorized. Token missing or invalid."
+}
+```
+
+---
+
+# Captain Logout Endpoint Documentation
+
+## Endpoint
+**POST /captain/logout**
+
+## Description
+This endpoint is used to log out a captain by clearing their authentication token from cookies. It performs the following steps:
+- Checks if the authentication token exists in cookies.
+- Clears the token from the cookie storage.
+- Returns a success message confirming logout.
+
+## Response
+Returns a success message upon logout.
+
+### Example Response (Successful Logout)
+```json
+{
+  "message": "Captain successfully logged out."
+}
+```
+
+### Example Response (Unauthorized Request)
+```json
+{
+  "error": "Unauthorized. No active session found."
+}
+```

@@ -54,13 +54,13 @@ const captainSchema = new mongoose.Schema({
       required: true,
       min: [1, "Capacity should be at least 1"],
     },
-    vehicleType: { // Corrected field name
+    vehicleType: {
       type: String,
       required: true,
       enum: ["car", "motorcycle", "auto"],
     },
   },
-location: {
+  location: {
     lat: {
       type: Number,
     },
@@ -71,7 +71,7 @@ location: {
 });
 
 captainSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: "24h",
   });
   return token;
