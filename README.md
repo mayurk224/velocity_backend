@@ -159,7 +159,7 @@ The endpoint returns the authenticated user's profile information.
 # • User Logout Endpoint Documentation
 
 ## Endpoint
-**POST /users/logout**
+**GET /users/logout**
 
 ## Description
 This endpoint is used to log out a user by invalidating their authentication token. It performs the following steps:
