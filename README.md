@@ -111,3 +111,79 @@ The endpoint expects a JSON payload with the following fields:
 }
 ```
 
+---
+
+# • User Profile Endpoint Documentation
+
+## Endpoint
+**GET /users/profile**
+
+## Description
+This endpoint is used to retrieve the authenticated user's profile details. It performs the following steps:
+- Validates the authentication token in the request header.
+- Extracts the user's ID from the token.
+- Fetches the user details from the database.
+- Returns the user's profile data.
+
+## Request Headers
+- `Content-Type: application/json`
+- `Authorization: Bearer <token>`
+
+## Response
+The endpoint returns the authenticated user's profile information.
+
+### Example Response (Successful Profile Fetch)
+```json
+{
+  "user": {
+    "fullname": {
+      "firstName": "John",
+      "lastName": "Doe"
+    },
+    "email": "example@domain.com",
+    "_id": "67e395e19304063306d0e979",
+    "createdAt": "2024-03-25T12:34:56.789Z"
+  }
+}
+```
+
+### Example Response (Unauthorized Access)
+```json
+{
+  "error": "Unauthorized. Token missing or invalid."
+}
+```
+
+---
+
+# • User Logout Endpoint Documentation
+
+## Endpoint
+**POST /users/logout**
+
+## Description
+This endpoint is used to log out a user by invalidating their authentication token. It performs the following steps:
+- Validates the authentication token in the request header.
+- Removes or invalidates the token from the server or client-side storage.
+- Confirms successful logout to the client.
+
+## Request Headers
+- `Content-Type: application/json`
+- `Authorization: Bearer <token>`
+
+## Response
+Returns a success message upon logout.
+
+### Example Response (Successful Logout)
+```json
+{
+  "message": "User successfully logged out."
+}
+```
+
+### Example Response (Unauthorized Request)
+```json
+{
+  "error": "Unauthorized. Token missing or invalid."
+}
+```
