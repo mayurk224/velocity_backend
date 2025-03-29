@@ -8,7 +8,7 @@ module.exports.createCaptain = async ({
   color,
   plate,
   capacity,
-  vehicleType, // Corrected from "vehcleType" to "vehicleType"
+  vehicleType,
 }) => {
   if (
     !firstname ||
@@ -18,7 +18,7 @@ module.exports.createCaptain = async ({
     !color ||
     !plate ||
     !capacity ||
-    !vehicleType // Corrected field name
+    !vehicleType
   ) {
     throw new Error("All fields are required");
   }
@@ -34,7 +34,7 @@ module.exports.createCaptain = async ({
       color,
       plate,
       capacity,
-      vehicleType, // Corrected field name
+      vehicleType,
     },
   });
 

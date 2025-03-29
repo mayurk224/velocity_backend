@@ -13,12 +13,10 @@ module.exports.registerUser = async (req, res, next) => {
     const { email, fullname, password } = req.body;
     const { firstname, lastname } = fullname;
 
-    const isUserAlreadyExist = userModel.findOne({ email });
+    const isUserAlreadyExist = await userModel.findOne({ email });
     if (isUserAlreadyExist) {
       return res.status(400).json({ message: "Email is already registered" });
     }
-
-    // console.log(req.body);
 
     if (!fullname || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
@@ -34,6 +32,7 @@ module.exports.registerUser = async (req, res, next) => {
     const token = user.generateAuthToken();
 
     res.status(201).json({ user, token });
+    next();
   } catch (error) {
     console.error("Error registering user:", error);
     res.status(500).send("Internal Server Error");
